@@ -1,0 +1,4 @@
+.vscode*
+res/AYTO.gephi
+src/__pycache__*
+res/AYTO-Edges.csv
