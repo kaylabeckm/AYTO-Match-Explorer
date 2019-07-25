@@ -2,14 +2,16 @@
 ### Kayla Beckham - 2019
 Explore the data of matching ceremony partners, beam counts, truth booth results, and hypothetical perfect matches for Are You The One? Season 8.
 
-## Run
-Download the project. Run by calling vis.py in the cli. Profit. (but not really profit)
+![MVP sample](/res/sample.png)
 
 ## This is the Minimum Viable Product for AYTO Match Explorer. 
 Contains data from the first 6 episodes of Season 8 in the /res folder. 
 You can toggle between weeks to see which matches happened together and how many beams appeared. 
 The logic exists to propose hypothetical matches but the UI does not.
 One hypothetical match was added programatically in vis.py. 
+
+## Run
+Download the project. Fix your dependencies probably. Run by calling vis.py in the cli. Profit. (but not really profit)
 
 ## TODO: 
 * package this so the dependencies aren't awful, I'm so sorry.
