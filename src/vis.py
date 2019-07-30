@@ -71,6 +71,11 @@ def updatePerfectMatch(pair):
 def clickMatch(pair, label):
     if(not data.togglePerfectMatch(pair)):
         label.destroy()
+        plt.clf()
+        this.G = makeGraph()
+        nx.draw_networkx(this.G, with_labels=True, font_weight='bold', pos=pos)
+        show_week(pos,beamLabel, this.highlightedWeek)
+        canvas.draw()
 
 if __name__ == "__main__":
     root = tk.Tk()

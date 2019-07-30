@@ -84,6 +84,16 @@ def removeWeeklyMatch(pair):
         if(pair in weeks[week]):
             weeks[week].remove(pair)
 
+def undoBlackout(week):
+    blackoutList = []
+    for couple in couples:
+        if(week in couples[couple]):
+            blackoutList.append(couple)
+    for pair in blackoutList:
+        if(pair not in perfectMatches):
+            weeks[week].append(pair)
+
+
 def addPerfectMatch(pair):
     matchedWeeks = couples[pair]
 
@@ -114,4 +124,4 @@ def removePerfectMatch(pair):
                 beamNum = int(beams[week])
             beams[week] = beamNum + 1
             if(beams[week] == 1):
-                print('TODO: REVERSE BLACKOUT')
+                undoBlackout(week)
