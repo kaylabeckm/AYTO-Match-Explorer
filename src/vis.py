@@ -81,7 +81,6 @@ def updatePerfectMatch(pair, init=False):
         canvas.draw()
         show_week(pos, beamLabel, this.highlightedWeek)
 
-
 def clickMatch(pair, label):
     if(not data.togglePerfectMatch(pair)):
         this.labelList.remove(label)
@@ -94,6 +93,12 @@ def clickMatch(pair, label):
         nx.draw_networkx(this.G, with_labels=True, font_weight='bold', pos=pos)
         show_week(pos,beamLabel, this.highlightedWeek)
         canvas.draw()
+
+def filterCouples(pair):
+    if(pair not in data.getNoMatches() and pair not in data.getPerfectMatches()):
+        return True
+    else:
+        return False
 
 if __name__ == "__main__":
     root = tk.Tk()
@@ -121,7 +126,7 @@ if __name__ == "__main__":
 
     coupleList = list(data.getCumulativeCouples().keys())
     
-    selectCouple = ttk.Combobox(root, values=coupleList)
+    selectCouple = ttk.Combobox(root, values=coupleList, postcommand=lambda: selectCouple.configure(values=list(filter(filterCouples,coupleList))))
     selectCouple.bind("<<ComboboxSelected>>",lambda x:updatePerfectMatch(tuple(selectCouple.get().split(' '))))
     selectCouple.place(x=500,y=10)
 

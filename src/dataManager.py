@@ -7,7 +7,7 @@ beams = {}
 couples = {}
 noMatches = []
 perfectMatches = []
-blackoutList = {}
+perfectMatchRemovals = {}
 
 def loadData():
     with open('res/AYTO-NODES.csv', newline='') as csvNames:
@@ -77,9 +77,12 @@ def fixOverlappingMatches(perfectMatch):
                 if(couple[0] == partner):
                     if(couple != perfectMatch):
                         addNoMatch(couple)
+                        perfectMatchRemovals[perfectMatch].append(couple)
                 if(couple[1] == partner):
                     if(couple != perfectMatch):
                         addNoMatch(couple)
+                        perfectMatchRemovals[perfectMatch].append(couple)
+
     for week in weeks:
         #print(str(perfectMatch) + str(beams[week]) + ", " + str(len(weeks[week])))
         if (len(weeks[week]) < int(beams[week])):
@@ -95,27 +98,28 @@ def removeWeeklyMatch(pair):
         if(pair in weeks[week]):
             weeks[week].remove(pair)
 
-def undoBlackout(pair):
-    for savedPair in blackoutList[pair]:
+def reverseMatchRemovals(pair):
+    for savedPair in perfectMatchRemovals[pair]:
         if(savedPair in noMatches):
             noMatches.remove(savedPair) #removes only one occurence of the pair in noMatches
             for matchedWeek in couples[savedPair]:
                 if (savedPair not in weeks[matchedWeek]):
                     weeks[matchedWeek].append(savedPair)
+    perfectMatchRemovals[pair] = []
 
 def findContributorsToBlackout(matchList):
     for otherPair in perfectMatches:
         for week in couples[otherPair]:
             if(beams[week] == 0):
-                if(otherPair not in blackoutList.keys()):
-                    blackoutList[otherPair] = []
-                blackoutList[otherPair].extend(matchList)
+                perfectMatchRemovals[otherPair].extend(matchList)
 
 def addPerfectMatch(pair):
     matchedWeeks = couples[pair]
 
     if(pair not in perfectMatches):
         perfectMatches.append(pair)
+    if(pair not in perfectMatchRemovals.keys()):
+        perfectMatchRemovals[pair] = []
 
     fixOverlappingMatches(pair)
     for week in matchedWeeks:
@@ -126,16 +130,15 @@ def addPerfectMatch(pair):
             beamNum = int(beams[week])
         beams[week] = beamNum - 1
         if(beams[week] == 0):
-            if(pair not in blackoutList.keys()):
-                blackoutList[pair] = []
-            blackoutList[pair].extend(weeks[week])
-            blackout(blackoutList[pair])
+            perfectMatchRemovals[pair].extend(weeks[week])
+            blackout(perfectMatchRemovals[pair])
 
 
 def removePerfectMatch(pair):
     matchedWeeks = couples[pair]
     if(pair in perfectMatches):
         perfectMatches.remove(pair)
+        reverseMatchRemovals(pair)
         
         for week in matchedWeeks:
             weeks[week].append(pair)
@@ -144,5 +147,3 @@ def removePerfectMatch(pair):
             if(type(beamNum) is str):
                 beamNum = int(beams[week])
             beams[week] = beamNum + 1
-            if(beams[week] == 1):
-                undoBlackout(pair)
