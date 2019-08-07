@@ -12,7 +12,7 @@ You can click on the matches you added to remove them from 'Perfect Matches' and
 The two officially confirmed perfect matches cannot be removed.
 
 ## Run
-Download the project. Fix your dependencies probably. Run by calling vis.py in the cli. Profit. (but not really profit)
+Download the project. Update requirements with 'pip install -R requirements.txt'. Run by calling vis.py in the cli. Profit. (but not really profit)
 For example, from the root of my ATYO directory, I call 'python3 src/vis.py' to run the project.
 
 ## TODO: 
