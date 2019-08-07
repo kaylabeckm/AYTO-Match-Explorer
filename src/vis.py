@@ -71,8 +71,7 @@ def addMatchLabel(pair, index, clickable):
 
 def updatePerfectMatch(pair, init=False):
     if (pair not in data.getNoMatches()):
-        if(not init):
-            data.togglePerfectMatch(pair)
+        data.togglePerfectMatch(pair)
         index = data.getPerfectMatches().index(pair)
         addMatchLabel(pair, index, not init)
         plt.clf()

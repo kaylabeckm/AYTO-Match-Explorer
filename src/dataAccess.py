@@ -36,4 +36,4 @@ def togglePerfectMatch(pair):
 
 def loadPerfectMatches():
     dataManager.loadPerfectMatches()
-    return dataManager.perfectMatches
+    return dataManager.confirmedMatches

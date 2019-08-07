@@ -6,6 +6,7 @@ weeks = {}
 beams = {}
 couples = {}
 noMatches = []
+confirmedMatches = []
 perfectMatches = []
 perfectMatchRemovals = {}
 
@@ -60,7 +61,7 @@ def loadPerfectMatches():
         next(perfectMatchReader)
         for row in perfectMatchReader:
             pair = (row[0], row[1])
-            perfectMatches.append(pair)
+            confirmedMatches.append(pair)
 
 
 def blackout(matchList):
