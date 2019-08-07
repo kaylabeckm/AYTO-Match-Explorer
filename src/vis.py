@@ -37,40 +37,58 @@ def setupButtons():
     b3.pack(side=tk.LEFT)
     b4 = tk.Button(root, text='4',command=lambda: show_week(pos,beamLabel,4),highlightbackground='#4d88ff')
     b4.pack(side=tk.LEFT)
-    button = tk.Button(root, text='5', command=lambda: show_week(pos,beamLabel,5),highlightbackground='#4d88ff')
-    button.pack(side=tk.LEFT)
+    b5 = tk.Button(root, text='5', command=lambda: show_week(pos,beamLabel,5),highlightbackground='#4d88ff')
+    b5.pack(side=tk.LEFT)
+    b6 = tk.Button(root, text='6', command=lambda: show_week(pos,beamLabel,6),highlightbackground='#4d88ff')
+    b6.pack(side=tk.LEFT)
+    this.buttons = [b1,b2,b3,b4,b5,b6]
 
 def show_week(pos, label, week):
-    beams = str(data.getBeams()[week])
-    label.configure(text = 'week '+str(week)+' has '+beams+' beam(s)')
+    if(week != 0):
+        beams = str(data.getBeams()[week])
+        label.configure(text = 'week '+str(week)+' has '+beams+' beam(s)')
     draw_edges(pos, week)
 
 def draw_edges(pos, week):
-    if(this.highlightedWeek != week and this.highlightedWeek != 0):
+    if(this.highlightedWeek != week):
         plt.clf()
         nx.draw_networkx(this.G, with_labels=True, font_weight='bold', pos=pos)
         plt.draw()
-    weekEdges = data.getMatchesPerWeek()[week] 
-    this.highlightedWeek = week
-    nx.draw_networkx_edges(this.G, pos,
-                       edgelist=weekEdges,
-                       width=3, alpha=0.5, edge_color='r')
-    canvas.draw()
+        this.highlightedWeek = week
+    if(this.highlightedWeek != 0):
+        weekEdges = data.getMatchesPerWeek()[week] 
+        nx.draw_networkx_edges(this.G, pos,
+                        edgelist=weekEdges,
+                        width=3, alpha=0.5, edge_color='r')
+        canvas.draw()
 
-def updatePerfectMatch(pair):
-    data.togglePerfectMatch(pair)
-    index = len(data.getPerfectMatches())
+def addMatchLabel(pair, index, clickable):
     label = tk.Label(root, text=str(pair))
     label.place(x=0, y=(index*20)+30)
-    label.bind("<Button-1>", lambda x:clickMatch(pair, label))
-    plt.clf()
-    this.G = makeGraph()
-    nx.draw_networkx(this.G, with_labels=True, font_weight='bold', pos=pos)
-    canvas.draw()
+    this.labelList.append(label)
+    if(clickable):
+        label.bind("<Button-1>", lambda x:clickMatch(pair, label))
+
+def updatePerfectMatch(pair, init=False):
+    if (pair not in data.getNoMatches()):
+        if(not init):
+            data.togglePerfectMatch(pair)
+        index = data.getPerfectMatches().index(pair)
+        addMatchLabel(pair, index, not init)
+        plt.clf()
+        this.G = makeGraph()
+        nx.draw_networkx(this.G, with_labels=True, font_weight='bold', pos=pos)
+        canvas.draw()
+        show_week(pos, beamLabel, this.highlightedWeek)
+
 
 def clickMatch(pair, label):
     if(not data.togglePerfectMatch(pair)):
+        this.labelList.remove(label)
         label.destroy()
+        for otherLabel in this.labelList:
+            index = this.labelList.index(otherLabel)
+            otherLabel.place(x=0, y=(index*20)+30)
         plt.clf()
         this.G = makeGraph()
         nx.draw_networkx(this.G, with_labels=True, font_weight='bold', pos=pos)
@@ -91,9 +109,8 @@ if __name__ == "__main__":
     canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
 
     this.highlightedWeek = 0
+    this.labelList = []
     data.init()
-    # updatePerfectMatch(('Justin', 'Max'))
-    # updatePerfectMatch(('Basit', 'Jonathan'))
 
     matchLabel = tk.Label(root, text='Perfect Matches: ')
     matchLabel.place(x=0,y=30)
@@ -112,4 +129,7 @@ if __name__ == "__main__":
     pos=nx.shell_layout(this.G)
     nx.draw_networkx(this.G, with_labels=True, font_weight='bold', pos=pos)
 
+    confirmedMatches = data.loadPerfectMatches()
+    for match in confirmedMatches:
+        updatePerfectMatch(match, True)
     tk.mainloop()

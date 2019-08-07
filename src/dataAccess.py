@@ -27,8 +27,13 @@ def getPerfectMatches():
 def togglePerfectMatch(pair):
     matches = getPerfectMatches()
     if(pair in matches):
+        print('removing match ' + str(pair))
         dataManager.removePerfectMatch(pair)
         return False
     else:
         dataManager.addPerfectMatch(pair)
         return True
+
+def loadPerfectMatches():
+    dataManager.loadPerfectMatches()
+    return dataManager.perfectMatches
