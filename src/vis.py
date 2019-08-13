@@ -41,7 +41,9 @@ def setupButtons():
     b5.pack(side=tk.LEFT)
     b6 = tk.Button(root, text='6', command=lambda: show_week(pos,beamLabel,6),highlightbackground='#4d88ff')
     b6.pack(side=tk.LEFT)
-    this.buttons = [b1,b2,b3,b4,b5,b6]
+    b7 = tk.Button(root, text='7', command=lambda: show_week(pos,beamLabel,7),highlightbackground='#4d88ff')
+    b7.pack(side=tk.LEFT)
+    this.buttons = [b1,b2,b3,b4,b5,b6,b7]
 
 def show_week(pos, label, week):
     if(week != 0):

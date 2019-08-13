@@ -99,14 +99,15 @@ def removeWeeklyMatch(pair):
         if(pair in weeks[week]):
             weeks[week].remove(pair)
 
-def reverseMatchRemovals(pair):
-    for savedPair in perfectMatchRemovals[pair]:
+def reverseMatchRemovals(reversedPair):
+    for savedPair in perfectMatchRemovals[reversedPair]:
         if(savedPair in noMatches):
             noMatches.remove(savedPair) #removes only one occurence of the pair in noMatches
             for matchedWeek in couples[savedPair]:
                 if (savedPair not in weeks[matchedWeek]):
-                    weeks[matchedWeek].append(savedPair)
-    perfectMatchRemovals[pair] = []
+                    if (matchedWeek in couples[reversedPair]):
+                        weeks[matchedWeek].append(savedPair)
+    perfectMatchRemovals[reversedPair] = []
 
 def findContributorsToBlackout(matchList):
     for otherPair in perfectMatches:
