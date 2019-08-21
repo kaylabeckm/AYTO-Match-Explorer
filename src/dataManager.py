@@ -135,7 +135,6 @@ def addPerfectMatch(pair):
             perfectMatchRemovals[pair].extend(weeks[week])
             blackout(perfectMatchRemovals[pair])
 
-
 def removePerfectMatch(pair):
     matchedWeeks = couples[pair]
     if(pair in perfectMatches):
